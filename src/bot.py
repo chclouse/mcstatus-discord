@@ -1,4 +1,3 @@
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import asyncio
 import datetime
 import discord
@@ -11,11 +10,14 @@ import traceback
 description = '''A Minecraft server status checker'''
 notifier = None
 notifier_file = 'persistent_notifier.json'
-config_file = 'config.json'
+sched = None
 
 bot = commands.Bot(command_prefix='!', description=description)
-sched = AsyncIOScheduler()
-sched.add_job(lambda: bot.loop.create_task(update()), 'interval', seconds=60)
+
+def set_scheduler(new_sched):
+    global sched
+    sched = new_sched
+
 
 @bot.event
 async def on_ready():
@@ -161,6 +163,10 @@ def main():
     with open(config_file) as f:
         config = json.loads(f.read())
     token = config['token']
+
+    sched = AsyncIOScheduler()
+    sched.add_job(lambda: bot.loop.create_task(update()), 'interval',
+            seconds=60)
 
     bot.run(token)
 
