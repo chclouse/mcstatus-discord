@@ -1,3 +1,7 @@
 {
-    "token": ""
+    "token": "",
+    "database": {
+        "type": "sqlite",
+        "filename": "notifiers.json"
+    }
 }

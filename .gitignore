@@ -1,3 +1,5 @@
 config.json
 persistent_notifier.json
 *.swp
+__pycache__/
+*.db
