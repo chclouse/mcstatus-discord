@@ -5,13 +5,17 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
 class MonitorType(enum.Enum):
+    """Provide a simple enum to differentiate passive and active monitors."""
     Passive = 0
     Active = 1
 
+# Some mandatory base classes from SQLAlchemy. Session is particularly
+# important.
 Base = declarative_base()
 Session = sessionmaker()
 
 class Status(Base):
+    """Model class for previously obtained server statuses."""
     __tablename__ = 'statuses'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -34,6 +38,7 @@ class Status(Base):
 
 
 class Monitor(Base):
+    """Model class for stored passive and active monitors."""
     __tablename__ = 'monitors'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
