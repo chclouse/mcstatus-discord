@@ -2,6 +2,6 @@
     "token": "",
     "database": {
         "type": "sqlite",
-        "filename": "notifiers.json"
+        "filename": "notifiers.db"
     }
 }
