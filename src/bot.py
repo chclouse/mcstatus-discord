@@ -29,7 +29,7 @@ async def on_ready():
 
 
 @bot.command()
-async def status(addr: str, persistence='single', montype='passive'):
+async def status(ctx, addr: str, persistence='single', montype='passive'):
     """Handler for the `!status` command.
     
     addr -- the server's address
@@ -48,7 +48,7 @@ async def status(addr: str, persistence='single', montype='passive'):
     em = generate_embed(addr, status)
 
     if persistence == 'persistent' and montype == 'passive':
-        msg = await bot.say('*(Updated every minute.)*', embed=em)
+        msg = await ctx.send('*(Updated every minute.)*', embed=em)
         session = models.Session()
 
         # Get the last server status from the database. The address field is
@@ -88,13 +88,13 @@ async def status(addr: str, persistence='single', montype='passive'):
 
     # Error cases.
     elif persistence == 'persistent' and montype in ('DM', 'channel'):
-        await bot.say('*Coming soon.*')
+        await ctx.send('*Coming soon.*')
     elif persistence == 'persistent':
-        await bot.say("*Sorry, I don't understand* `{}`.".format(montype))
+        await ctx.send("*Sorry, I don't understand* `{}`.".format(montype))
 
     # Fall-through case (one-time status)
     else:
-        await bot.say(embed=em)
+        await ctx.send(embed=em)
 
 
 async def update():
@@ -138,7 +138,8 @@ async def update():
 
             # Go through and update all the monitors.
             for monitor in monitors:
-                channel = bot.get_channel(monitor.channel)
+                #TODO: Migrate monitor.channel to an int type
+                channel = bot.get_channel(int(monitor.channel))
 
                 # Drop a monitor if its channel is no longer accessible.
                 if channel is None:
@@ -152,8 +153,8 @@ async def update():
 
                     # Get the message and drop the monitor if that fails.
                     try:
-                        message = await bot.get_message(channel,
-                                monitor.message)
+                        message = await channel.fetch_message(
+                                int(monitor.message))
                     except discord.errors.NotFound:
                         print(f'Message <{monitor.message}> not found.')
                         print(f'Deleting {monitor} from database.')
@@ -163,8 +164,8 @@ async def update():
 
                     # Update the message.
                     em = generate_embed(addr, status)
-                    await bot.edit_message(message,
-                            '*(Updated every minute.)*', embed=em)
+                    await message.edit(content='*(Updated every minute.)*',
+                            embed=em)
 
                 else:
                     em = generate_embed(addr, status)
