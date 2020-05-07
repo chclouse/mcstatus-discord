@@ -35,7 +35,8 @@ The bot will then update it in the background every 60 seconds if the server sta
 
 ## Invite the Bot, Try it Out!
 
-Click [here][invite] to invite the bot to your server.
+~~Click __here__ to invite the bot to your server.~~  
+*(The invite link for the bot is temporarily disabled due to [issue #3](https://github.com/chclouse/mcstatus-discord/issues/3).)*
 
 [token]: https://discordpy.readthedocs.io/en/rewrite/discord.html
 [invite]: https://discordapp.com/api/oauth2/authorize?client_id=470819771353661440&permissions=0&scope=bot
